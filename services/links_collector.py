@@ -11,13 +11,17 @@ def get_links(url):
         if link != None and not link.startswith('#'):
             if not link.startswith('http'):
                 link = url + link
+            return link
+        return False
 
     r = requests.get(url)
     print(r.status_code)
     soup = BeautifulSoup(r.text,features="html.parser")
     links = []
     for rawlink in soup.findAll('a'):
-        links.append(filter_link(rawlink))
+        filtered = filter_link(rawlink)
+        if filtered:
+            links.append(filtered)
 
     return links
 

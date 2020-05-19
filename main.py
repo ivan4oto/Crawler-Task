@@ -1,10 +1,16 @@
+import sys
+
 from services.links_collector import get_links
-from services.gateways import create_tables
+from services.gateways import UrlGateway
 
 
 
 def main():
-    create_tables()
+    url_gateway = UrlGateway()
+    url_gateway.create_all_tables()
+
+
+    
 
 
 if __name__ == "__main__":
