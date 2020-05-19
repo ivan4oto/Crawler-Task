@@ -24,7 +24,14 @@ class UrlGateway:
 
     def add_url_list(self, url_list, base_url):
         with session_scope(self.session) as session:
-            urlobjlist = [Url(url_name = u, base_url = base_url) for u in url_list]
-            session.add_all(urlobjlist)
+            urls = [Url(url_name = u, base_url = base_url) for u in url_list]
+            session.add_all(urls)
 
-            return urlobjlist
+            return urls
+
+    def get_all_urls(self):
+        with session_scope(self.session) as session:
+            urls = session.query(Url).all()
+            
+            return urls
+
