@@ -26,16 +26,14 @@ class TestUrl(unittest.TestCase):
     def test_add_url(self):
         url_name = 'https://github.com/ivan4oto'
         base_url = 'https://hackbulgaria.com/'
-        url_server = 'amazon'
         url_domain = 'https://github.com/'
 
-        self.gateway.add_url(url_name = url_name, base_url = base_url, url_server = url_server, url_domain = url_domain)
+        self.gateway.add_url(url_name = url_name, base_url = base_url, url_domain = url_domain)
         with session_scope(self.gateway.session) as session:
             fetched = session.query(Url).one()
 
             self.assertEqual(fetched.url_name, url_name)
             self.assertEqual(fetched.base_url, base_url)
-            self.assertEqual(fetched.url_server, url_server)
             self.assertEqual(fetched.url_domain, url_domain)
 
 
