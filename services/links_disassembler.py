@@ -11,8 +11,5 @@ def get_link_url(link, suffix):
     return result
 
 
-
-
-
 if __name__ == "__main__":
     pass

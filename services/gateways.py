@@ -15,16 +15,16 @@ class UrlGateway:
     def create_all_tables(self):
         self.base.metadata.create_all(self.db.engine)
 
-    def add_url(self, url_name, base_url):
+    def add_url(self, url_name, base_url, url_server, url_domain):
         with session_scope(self.session) as session:
-            url = Url(url_name = url_name, base_url = base_url)
+            url = Url(url_name = url_name, base_url = base_url, url_server = url_server, url_domain = url_domain)
             session.add(url)
 
             return url
 
-    def add_url_list(self, url_list, base_url):
+    def add_url_list(self, url_list, base_url, url_server, url_domain):
         with session_scope(self.session) as session:
-            urls = [Url(url_name = u, base_url = base_url) for u in url_list]
+            urls = [Url(url_name = u, base_url = base_url, url_domain = url_domain, url_server = url_server) for u in url_list]
             session.add_all(urls)
 
             return urls
@@ -32,6 +32,6 @@ class UrlGateway:
     def get_all_urls(self):
         with session_scope(self.session) as session:
             urls = session.query(Url).all()
-            
+
             return urls
 
