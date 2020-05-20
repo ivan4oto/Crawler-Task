@@ -1,7 +1,7 @@
 from urllib.parse import urlparse
 
 
-def get_link_url(link, suffix):
+def get_link_domain(link, suffix):
     o = urlparse(link)
     
     if not o.netloc.endswith(suffix):

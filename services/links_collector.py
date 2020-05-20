@@ -13,15 +13,18 @@ def get_links(url):
                 link = url + link
             return link
         return False
+    try:
+        r = requests.get(url)
+        print(r.status_code)
+        soup = BeautifulSoup(r.text,features="html.parser")
+        links = []
+        for rawlink in soup.findAll('a'):
+            filtered = filter_link(rawlink)
+            if filtered:
+                links.append(filtered)
 
-    r = requests.get(url)
-    print(r.status_code)
-    soup = BeautifulSoup(r.text,features="html.parser")
-    links = []
-    for rawlink in soup.findAll('a'):
-        filtered = filter_link(rawlink)
-        if filtered:
-            links.append(filtered)
+    except Exception:
+        return False
 
     return links
 

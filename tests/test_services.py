@@ -1,5 +1,5 @@
 import unittest
-from services import get_link_server, get_link_url
+from services import get_link_server, get_link_domain
 
 
 class TestGetLinkServer(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestGetLinkServer(unittest.TestCase):
 
 class TestLinksDisassembler(unittest.TestCase):
     def test_func_returns_full_domain_from_path_link(self):
-        result = get_link_url('https://requests.readthedocs.io/en/master/user/quickstart/#redirection-and-history', 'io')
+        result = get_link_domain('https://requests.readthedocs.io/en/master/user/quickstart/#redirection-and-history', 'io')
         expected = 'https://requests.readthedocs.io/'
 
         self.assertEqual(result, expected)

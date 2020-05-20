@@ -1,16 +1,17 @@
 from db import base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 
 class Url(base):
     __tablename__ = 'urls'
 
-    id = Column(Integer, primary_key = True)
+    id = Column(Integer, primary_key=True)
     url_name = Column(String)
     base_url = Column(String)
     url_domain = Column(String)
+    visited = Column(Integer, default=0, nullable=False)
 
     def __str__(self):
-        return f'''ID = {self.id} Url = {self.url_name} base_link = {self.base_url} domain = {self.url_domain}'''
+        return f'Url = {self.url_name}, matternalURL = {self.base_url}'
 
     def __repr__(self):
         return str(self)
@@ -19,7 +20,7 @@ class Url(base):
 class Domain(base):
     __tablename__ = 'domains'
 
-    id = Column(Integer, primary_key = True)
+    id = Column(Integer, primary_key=True)
     domain_name = Column(String)
     domain_server = Column(String)
 

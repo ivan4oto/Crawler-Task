@@ -1,7 +1,9 @@
 from db import Database, base, session_scope
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import IntegrityError
 from settings import DB_NAME
 from models.url_model import Url, Domain
+
 
 db = Database(DB_NAME)
 
@@ -22,17 +24,15 @@ class UrlGateway:
 
             return url
 
-    def add_url_list(self, url_list, base_url, url_domain):
+    def add_url_list(self, url_list):
         with session_scope(self.session) as session:
-            urls = [Url(url_name = u, base_url = base_url, url_domain = url_domain) for u in url_list]
-            session.add_all(urls)
+            session.add_all(url_list)
 
-            return urls
+            
 
     def get_all_urls(self):
         with session_scope(self.session) as session:
             urls = session.query(Url).all()
-
             return urls
 
     def get_unique_domains(self):
@@ -43,7 +43,22 @@ class UrlGateway:
 
             return results
 
+    def visit_url(self, url_name):
+        with session_scope(self.session) as session:
+            url = session.query(Url).filter(Url.url_name == url_name).all()
+            if len(url) > 1:
+                return False
 
+            url[0].visited = True
+            session.add(url[0])
+
+            return True
+
+    def visit_check(self, url_name):
+        with session_scope(self.session) as session:
+            url = session.query(Url).filter(Url.url_name == url_name).one()
+
+            return url.visited
 
 class DomainGateway:
     def __init__(self):

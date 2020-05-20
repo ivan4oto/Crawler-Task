@@ -17,7 +17,7 @@ class Database:
 @contextmanager
 def session_scope(session_maker):
     """Provide a transactional scope around a series of operations."""
-    session = session_maker()
+    session = session_maker(expire_on_commit = False)
     try:
         yield session
         session.commit()

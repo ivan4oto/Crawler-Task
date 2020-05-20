@@ -36,6 +36,22 @@ class TestUrl(unittest.TestCase):
             self.assertEqual(fetched.base_url, base_url)
             self.assertEqual(fetched.url_domain, url_domain)
 
+            self.assertEqual(fetched.visited, False)
+
+    def test_visit_url(self):
+        url_name = 'https://github.com/ivan4oto'
+        base_url = 'https://hackbulgaria.com/'
+        url_domain = 'https://github.com/'
+
+        self.gateway.add_url(url_name = url_name, base_url = base_url, url_domain = url_domain)
+        self.gateway.visit_url(url_name)
+        with session_scope(self.gateway.session) as session:
+            fetched = session.query(Url).one()
+
+            self.assertTrue(fetched.visited)        
+
+
+
 
 
 if __name__ == "__main__":
