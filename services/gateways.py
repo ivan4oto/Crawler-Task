@@ -1,6 +1,7 @@
 from db import Database, base, session_scope
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
+from time import time
 
 from settings import DB_NAME
 from models.url_model import Url, Domain
@@ -18,9 +19,9 @@ class UrlGateway:
     def create_all_tables(self):
         self.base.metadata.create_all(self.db.engine)
 
-    def add_url(self, url_name, base_url, url_domain):
+    def add_url(self, url_name, base_url, url_domain, time):
         with session_scope(self.session) as session:
-            url = Url(url_name = url_name, base_url = base_url, url_domain = url_domain)
+            url = Url(url_name = url_name, base_url = base_url, url_domain = url_domain, time = time)
             session.add(url)
 
             return url
@@ -49,18 +50,22 @@ class UrlGateway:
             url = session.query(Url).filter(Url.url_name == url_name).all()
             if len(url) > 1:
                 return False
-
+            url[0].time = time()
             url[0].visited = True
             session.add(url[0])
 
             return True
 
-    def visit_check(self, url_name):
+    def visit_n_urls(self, n):
         with session_scope(self.session) as session:
-            url = session.query(Url).filter(Url.url_name == url_name).one()
+            urls = session.query(Url).filter(Url.visited == False).limit(n).all()
+            for url in urls:
+                url.visited = True
+                url.time = time()
+            session.add_all(urls)
 
-            return url.visited
-
+            return urls
+    
 
 class DomainGateway:
     def __init__(self):
@@ -84,7 +89,7 @@ class DomainGateway:
 
             return results
 
-    def count_servers(self):
+    def get_all_servers(self):
         with session_scope(self.session) as session:
             q = (session.query(Domain.domain_server, func.count(Domain.id).label("#Servers"))
                 .group_by(Domain.domain_server)

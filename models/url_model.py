@@ -1,5 +1,5 @@
 from db import base
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, Float
 
 class Url(base):
     __tablename__ = 'urls'
@@ -9,6 +9,7 @@ class Url(base):
     base_url = Column(String)
     url_domain = Column(String)
     visited = Column(Integer, default=0, nullable=False)
+    time = Column(Float, nullable = True)
 
     def __str__(self):
         return f'Url = {self.url_name}, matternalURL = {self.base_url}'
