@@ -60,6 +60,7 @@ class Application:
         for d in new_domains:
             if d not in old_domains:
                 domain_server = get_link_server(d)
+                print(domain_server)
                 self.domain_gateway.add_domain(domain_name = d, domain_server = domain_server)
 
 
@@ -69,6 +70,7 @@ def main():
     app.create_tables()
     app.add_start_url()
     app.crawler()
+    # app.store_domains()
 
 if __name__ == "__main__":
     main()

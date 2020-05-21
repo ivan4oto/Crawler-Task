@@ -1,9 +1,10 @@
 from db import Database, base, session_scope
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
+
 from settings import DB_NAME
 from models.url_model import Url, Domain
-
+from sqlalchemy import func
 
 db = Database(DB_NAME)
 
@@ -60,6 +61,7 @@ class UrlGateway:
 
             return url.visited
 
+
 class DomainGateway:
     def __init__(self):
         self.db = Database(DB_NAME)
@@ -81,3 +83,11 @@ class DomainGateway:
                 results.append(d.domain_name)
 
             return results
+
+    def count_servers(self):
+        with session_scope(self.session) as session:
+            q = (session.query(Domain.domain_server, func.count(Domain.id).label("#Servers"))
+                .group_by(Domain.domain_server)
+                ).all()
+
+            return q

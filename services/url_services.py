@@ -1,6 +1,8 @@
 import re
 import requests
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse
+
 
 
 
@@ -22,12 +24,28 @@ def get_links(url):
             filtered = filter_link(rawlink)
             if filtered:
                 links.append(filtered)
-
     except Exception:
         return False
 
     return links
 
 
-if __name__ == "__main__":
-    pass
+
+def get_link_server(url):
+    try:
+        r = requests.get(url)
+        return r.headers['Server']
+        
+    except Exception:
+        return None
+
+
+
+def get_link_domain(link, suffix):
+    o = urlparse(link)
+    
+    if not o.netloc.endswith(suffix):
+        return False
+    result = o.scheme + "://" + o.netloc + '/'
+    
+    return result

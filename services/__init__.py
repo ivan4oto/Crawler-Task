@@ -1,3 +1,1 @@
-from .link_domain_getter import get_link_domain
-from .links_collector import get_links
-from .links_get_data import get_link_server
+from .url_services import get_link_domain, get_links, get_link_server
