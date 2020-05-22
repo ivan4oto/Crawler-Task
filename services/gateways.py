@@ -65,6 +65,13 @@ class UrlGateway:
             session.add_all(urls)
 
             return urls
+
+    def get_all_visited(self):
+        with session_scope(self.session) as session:
+            visited = session.query(Url).filter(Url.time != None).all()
+
+            return visited
+
     
 
 class DomainGateway:
