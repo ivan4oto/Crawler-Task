@@ -7,7 +7,6 @@ def set_up_servers():
     servers_stats = domain_gate.get_all_servers()
     servers_stats = [list(s) for s in servers_stats]
 
-<<<<<<< HEAD
     filtered_servers = [['Apache', 0], ['nginx', 0]]
 
 
@@ -42,18 +41,3 @@ def plot(servers):
 def main_plot():
     servers = set_up_servers()
     plot(servers)
-=======
-domain_gate = DomainGateway()
-servers_stats = domain_gate.count_servers()
-
-
-height = [i[1] for i in servers_stats]
-bars = [i[0] for i in servers_stats]
-y_pos = np.arange(len(bars))
- 
-plt.barh(y_pos, height)
- 
-plt.yticks(y_pos, bars)
- 
-plt.show()
->>>>>>> 92a86660d19de6a150116a963ae953f2b0c7e58d

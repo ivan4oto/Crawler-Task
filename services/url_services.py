@@ -44,7 +44,7 @@ def get_link_server(url):
 def get_link_domain(link, suffix):
     o = urlparse(link)
     
-    if not o.netloc.endswith(suffix):
+    if (not o.netloc.endswith(suffix)) or len(o.geturl().split('.')) >= 3:
         return False
     result = o.scheme + "://" + o.netloc + '/'
     

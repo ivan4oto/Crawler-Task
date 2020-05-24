@@ -30,7 +30,6 @@ class UrlGateway:
         with session_scope(self.session) as session:
             session.add_all(url_list)
 
-            
 
     def get_all_urls(self):
         with session_scope(self.session) as session:
@@ -41,7 +40,8 @@ class UrlGateway:
         with session_scope(self.session) as session:
             results = []
             for u in session.query(Url.url_domain).distinct():
-                results.append(u.url_domain)
+                if len(u.url_domain.split('.')) < 3:
+                    results.append(u.url_domain)
 
             return results
 
@@ -65,6 +65,17 @@ class UrlGateway:
             session.add_all(urls)
 
             return urls
+
+    def get_all_visited(self):
+        with session_scope(self.session) as session:
+            visited = session.query(Url).filter(Url.time != None).all()
+
+            return visited
+
+    def get_all_visited_timerange(self, start, end):
+        with session_scope(self.session) as session:
+            visited = session.query(Url).filter(Url.time <= start).filter(Url.time >= end).all()
+            return visited
     
 
 class DomainGateway:

@@ -2,6 +2,7 @@ import sys
 from time import time
 from services import get_link_domain, get_link_server, get_links
 from services.gateways import UrlGateway, DomainGateway
+from services.controllers_url import UrlController
 from models.url_model import Url, Domain
 from analytics.plotting import main_plot
 
@@ -10,6 +11,7 @@ class Application:
         self.url = url
         self.suffix = suffix
         self.url_gateway = UrlGateway()
+        self.url_controller = UrlController()
         self.domain_gateway = DomainGateway()
 
     def add_start_url(self):
@@ -28,9 +30,6 @@ class Application:
     def crawler(self):
         tocrawl = self.url_gateway.visit_n_urls(20)
         for i in tocrawl:
-            # if self.url_gateway.visit_url(url_name = i.url_name):
-            #     self.url_gateway.visit_url(url_name = i.url_name)
-
             result = self.crawl(i.url_name)
             if result:
                 self.url_gateway.add_url_list(url_list = result)
@@ -72,7 +71,8 @@ def main():
     
     1. Crawl urls from starting url.
     2. Crawl urls and save domains (>>> run option 1 to gather urls first <<<)
-    3. Get Analytics (>>> run option 1 and 2 to gather data first <<<)
+    3. Get Servers stats (>>> run option 1 and 2 to gather data first <<<)
+    4. Get number of visited links.
     \n''')
 
     
@@ -94,6 +94,22 @@ def main():
     if command == '3':
         main_plot()
 
+    if command == '4':
+        command = input('''
+        Do you wish to get results for:
+        
+        1. Total number of visited links and time.
+        2. Number of visited links for given time.\n        
+        ''')
+
+        app = Application()
+
+        if command == '1':
+            app.url_controller.get_count_and_time()
+        if command == '2':
+            timerange = input('\nGet visits for the last: ')
+            if timerange.split(' ')[1] == 'minutes':
+                print(app.url_controller.get_count_last_minutes(int(timerange.split(' ')[0])))
 
 if __name__ == "__main__":
     main()
