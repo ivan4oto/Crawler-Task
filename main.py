@@ -95,10 +95,21 @@ def main():
         main_plot()
 
     if command == '4':
+        command = input('''
+        Do you wish to get results for:
+        
+        1. Total number of visited links and time.
+        2. Number of visited links for given time.\n        
+        ''')
+
         app = Application()
-        app.url_controller.get_count_and_time()
 
-
+        if command == '1':
+            app.url_controller.get_count_and_time()
+        if command == '2':
+            timerange = input('\nGet visits for the last: ')
+            if timerange.split(' ')[1] == 'minutes':
+                print(app.url_controller.get_count_last_minutes(int(timerange.split(' ')[0])))
 
 if __name__ == "__main__":
     main()

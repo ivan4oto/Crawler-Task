@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+from time import time
 from .gateways import UrlGateway
 
 class UrlController:
@@ -31,4 +32,13 @@ class UrlController:
             print(f'\n{len(visited)} visited links for the past:')
             print(f'{real_time[0]} seconds')
         
+    def get_count_last_minutes(self, minutes):
+        end = datetime.fromtimestamp(time()) - timedelta(minutes = minutes)
+        end = datetime.timestamp(end)
+        return len(self.gateway.get_all_visited_timerange(time(), end))        
 
+    def get_count_last_hours(self):
+        pass
+
+
+  
